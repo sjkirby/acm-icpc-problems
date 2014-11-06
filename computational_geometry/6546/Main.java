@@ -91,12 +91,15 @@ class Circle{
 		r = _r;
 	}
 	
-	//THESE NEED 0,0 CENTER TO WORK
+	//MORE EFFICIENT WITH CIRCLE AT 0,0
 	double sgn(double dy){
 		if(dy<0) return -1;
 		return 1;
 	}
 	void intersections(Line l){
+		if(x != 0||y!=0){
+			l = new Line(l.x1-x,l.y1-y,l.x2-x,l.y2-y);
+		}
 		double xPlusMinus = sgn(l.dy)*l.dx*Math.sqrt(r*r*l.dr*l.dr - l.dot*l.dot);
 		double ix1 = l.dot * l.dy + xPlusMinus;
 		double ix2 = l.dot * l.dy - xPlusMinus;
@@ -109,12 +112,23 @@ class Circle{
 		iy1 /= l.dr*l.dr;
 		iy2 /= l.dr*l.dr;
 		
+		if(x != 0||y!=0){
+			ix1 += x;
+			ix2 += x;
+			iy1 += y;
+			iy2 += y;
+		}
+		
+		
 		System.out.println("("+ix1+","+iy1+") ("+ix2+","+iy2+")");
 		
 	}
 	
 	//returns 0 for no intersection, 1 for tangent, and 2 for intersection 
 	int intersects(Line l){
+		if(x != 0||y!=0){
+			l = new Line(l.x1-x,l.y1-y,l.x2-x,l.y2-y);
+		}
 		double temp = r*r*l.dr*l.dr-l.dot*l.dot;
 		if(temp != 0){
 			if(temp < 0){
@@ -124,7 +138,6 @@ class Circle{
 		}
 		return 1;
 	}
-	//THESE NEED 0,0 CENTER TO WORK
 	
 	//true if p is within circle
 	boolean contains(Point p){
@@ -152,12 +165,12 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
 		
-//		Line l = new Line(0,0,1,1);
-//		Line l2 = new Line(0,2,1,1.5);
+//		Line l1 = new Line(0,0,0,1);
+//		Line l21 = new Line(0,2,1,1.5);
 //		Point p = new Point(0,0.999999);
 //		Circle c = new Circle(0,0,1);
 //		p(""+c.intersects(l));
-//		Point intersect = l.intersection(l2);
+//		Point intersect = l1.intersection(l21);
 //		p("("+intersect.x+","+intersect.y+")");
 //		p("("+c.within(p)+")");
 		
@@ -203,3 +216,8 @@ public class Main {
 		in.close();	
 	}
 }
+/*
+01000101101000
+1001000101001000
+0
+*/
